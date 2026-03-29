@@ -1,0 +1,1313 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const GITHUB_URL = "https://github.com/simcast-dev/simcast";
+
+const features = [
+  {
+    title: "Window-level capture",
+    desc: "ScreenCaptureKit captures only the Simulator window — no full-screen recording, no distractions, no accidental screen shares.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M2 4.25A2.25 2.25 0 014.25 2h11.5A2.25 2.25 0 0118 4.25v8.5A2.25 2.25 0 0115.75 15H13.5v1.25a.75.75 0 01-.75.75H7.25a.75.75 0 01-.75-.75V15H4.25A2.25 2.25 0 012 12.75v-8.5z" clip-rule="evenodd" /></svg>`,
+  },
+  {
+    title: "H.264 over WebRTC",
+    desc: "Hardware-accelerated H.264 encoding via VideoToolbox, streamed over LiveKit WebRTC. Sub-100ms latency, no browser plugins.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path d="M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z" /></svg>`,
+  },
+  {
+    title: "Remote touch injection",
+    desc: "Click in the browser — the tap lands in the simulator via macOS accessibility APIs. Real interaction, not a VNC hack.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 101.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z" clip-rule="evenodd" /></svg>`,
+  },
+  {
+    title: "Ephemeral sessions",
+    desc: "Zero data stored. Sessions exist only while the macOS app is running — auto-cleaned on quit. Privacy by design.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M10 1a9 9 0 100 18A9 9 0 0010 1zm0 2a7 7 0 110 14A7 7 0 0110 3zm0 10.5a1 1 0 100-2 1 1 0 000 2zm.75-5.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z" clip-rule="evenodd" /></svg>`,
+  },
+  {
+    title: "Multi-simulator",
+    desc: "Run multiple simulators at once. Each broadcasts independently and appears as its own card in the live dashboard.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path d="M2 4.5A2.5 2.5 0 014.5 2h11A2.5 2.5 0 0118 4.5v3a2.5 2.5 0 01-2.5 2.5h-11A2.5 2.5 0 012 7.5v-3zM2 12.5A2.5 2.5 0 014.5 10h4a2.5 2.5 0 012.5 2.5V14a2.5 2.5 0 01-2.5 2.5h-4A2.5 2.5 0 012 14v-1.5zM13 12.5A2.5 2.5 0 0115.5 10H16a2.5 2.5 0 012.5 2.5V14A2.5 2.5 0 0116 16.5h-.5A2.5 2.5 0 0113 14v-1.5z" /></svg>`,
+  },
+  {
+    title: "Open source",
+    desc: "MIT licensed. Self-host everything — macOS app, web client, backend. Audit it, fork it, ship it.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clip-rule="evenodd" /></svg>`,
+  },
+];
+
+---
+
+<Layout title="SimCast — iOS Simulator Streaming" description="Stream iOS Simulators live from your Mac to any browser, with real-time touch interaction over WebRTC.">
+  <main style="background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden;">
+
+    <!-- Gradient mesh — top bloom -->
+    <div class="fixed inset-0 pointer-events-none gradient-mesh" style="z-index: 0;">
+      <div class="absolute" style="top: -20%; left: 50%; transform: translateX(-50%); width: 900px; height: 700px; background: radial-gradient(ellipse at center, rgba(109,40,217,0.55) 0%, rgba(79,70,229,0.3) 30%, transparent 70%); filter: blur(1px);"></div>
+      <div class="absolute animate-aurora-1" style="top: -5%; left: -10%; width: 700px; height: 600px; background: radial-gradient(ellipse at center, rgba(123,82,255,0.4) 0%, transparent 65%); filter: blur(40px);"></div>
+      <div class="absolute animate-aurora-2" style="top: 0%; right: -5%; width: 600px; height: 500px; background: radial-gradient(ellipse at center, rgba(59,130,246,0.3) 0%, rgba(0,207,255,0.15) 40%, transparent 70%); filter: blur(50px);"></div>
+      <div class="absolute" style="bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to top, var(--bg) 0%, transparent 100%);"></div>
+      <div class="absolute inset-0" style="background-image: radial-gradient(circle, rgba(123,82,255,0.25) 1px, transparent 1px); background-size: 36px 36px; opacity: 0.35; mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, black 0%, transparent 100%);"></div>
+      <div class="absolute inset-0 bg-noise" style="opacity: 0.025;"></div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="nav" style="z-index: 10;">
+      <div class="nav-brand">
+        <div class="logo-icon">
+          <img src="/SimCast.png" alt="SimCast" width="36" height="36" style="border-radius: 0.5rem;" />
+        </div>
+        <span class="logo-text">SimCast</span>
+      </div>
+      <div class="nav-links">
+        <a href="https://github.com/simcast-dev/simcast/discussions" class="nav-pill" rel="noopener noreferrer">Blog</a>
+        <a href="https://github.com/simcast-dev/simcast/releases" class="nav-pill" rel="noopener noreferrer">Changelog for v0.1</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" style="z-index: 10;">
+      <div class="hero-grid">
+
+        <!-- Left: copy -->
+        <div class="hero-copy">
+          <div class="animate-fade-in-up">
+            <h1 class="headline">
+              Stream any iOS Simulator,{" "}
+              <span class="headline-accent">anywhere.</span>
+            </h1>
+          </div>
+
+          <p class="subtext animate-fade-in-up delay-200">
+            Capture any Simulator window on your Mac, encode it to H.264, and broadcast it over WebRTC to any browser — with real-time touch interaction. No plugins. No VNC. No compromises.
+          </p>
+
+          <div class="cta-row animate-fade-in-up delay-300">
+            <a href={GITHUB_URL} class="cta-github">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>
+              View on GitHub
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Right: illustration -->
+        <div class="hero-illustration animate-fade-in-up delay-300">
+          <div class="illustration-wrapper animate-float">
+            <!-- Outer ambient glow -->
+            <div class="illustration-glow animate-glow-breathe"></div>
+
+            <!-- Perspective wrapper -->
+            <div style="perspective: 1100px;">
+              <div style="transform: rotateX(4deg) rotateY(-10deg);" class="illustration-inner">
+                <!-- Browser chrome -->
+                <div class="browser-chrome">
+                  <!-- Tab bar -->
+                  <div class="tab-bar">
+                    <div class="dot" style="background: #FF5F57;"></div>
+                    <div class="dot" style="background: #FFBD2E;"></div>
+                    <div class="dot" style="background: #28C840;"></div>
+                    <div class="address-bar">
+                      <div class="address-dot"></div>
+                      <span class="address-text">simcast.dev/dashboard</span>
+                    </div>
+                  </div>
+
+                  <!-- Page content — split layout -->
+                  <div class="browser-content">
+                    <!-- Left panel: simulator list -->
+                    <div class="panel-left">
+                      <div class="section-header">
+                        <span class="section-title">ACTIVE SIMULATORS</span>
+                        <span class="section-badge">3</span>
+                        <div class="section-line"></div>
+                        <span class="section-uptime">22m session</span>
+                      </div>
+
+                      <!-- Card 1 — watching -->
+                      <div class="sim-card sim-card-active">
+                        <div class="sim-card-top">
+                          <div class="sim-icon-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" style="color: #7C3AED;">
+                              <rect x="6" y="2" width="12" height="20" rx="2.5" />
+                              <circle cx="12" cy="18.5" r="0.75" fill="currentColor" stroke="none" />
+                              <line x1="6" y1="4.5" x2="18" y2="4.5" stroke-width="0.75" />
+                            </svg>
+                          </div>
+                          <div class="sim-info">
+                            <div class="sim-name-row">
+                              <span class="sim-name">iPhone 17 Pro</span>
+                              <span class="watching-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="7" height="7"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" /><circle cx="8" cy="8" r="2" fill="currentColor" stroke="none" /></svg>
+                                WATCHING
+                              </span>
+                            </div>
+                            <p class="sim-os">iOS 26.2</p>
+                            <p class="sim-udid">3A1F8B2C</p>
+                          </div>
+                        </div>
+                        <div class="sim-card-footer">
+                          <span class="sim-duration">Started 22m ago</span>
+                          <div class="sim-actions">
+                            <div class="sim-btn sim-btn-danger">
+                              <svg viewBox="0 0 16 16" fill="currentColor" width="8" height="8"><rect x="3" y="3" width="10" height="10" rx="1" /></svg>
+                              Stop
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Card 2 — streaming -->
+                      <div class="sim-card sim-card-streaming">
+                        <div class="sim-card-top">
+                          <div class="sim-icon-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" style="color: #7C3AED;">
+                              <rect x="4" y="2" width="16" height="20" rx="2.5" />
+                              <circle cx="12" cy="18.5" r="0.75" fill="currentColor" stroke="none" />
+                              <line x1="4" y1="4.5" x2="20" y2="4.5" stroke-width="0.75" />
+                            </svg>
+                          </div>
+                          <div class="sim-info">
+                            <div class="sim-name-row">
+                              <span class="sim-name">iPad Pro 13"</span>
+                              <span class="streaming-badge">
+                                <span class="streaming-dot"></span>
+                                STREAMING
+                              </span>
+                            </div>
+                            <p class="sim-os">iPadOS 26.1</p>
+                            <p class="sim-udid">E7D04A9F</p>
+                          </div>
+                        </div>
+                        <div class="sim-card-footer">
+                          <span class="sim-duration">Started 14m ago</span>
+                          <div class="sim-actions">
+                            <span class="sim-watch-hint">
+                              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="10" height="10"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" /><circle cx="8" cy="8" r="2" fill="currentColor" stroke="none" /></svg>
+                              Tap to watch
+                            </span>
+                            <div class="sim-btn sim-btn-danger">
+                              <svg viewBox="0 0 16 16" fill="currentColor" width="8" height="8"><rect x="3" y="3" width="10" height="10" rx="1" /></svg>
+                              Stop
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Card 3 — idle -->
+                      <div class="sim-card sim-card-inactive">
+                        <div class="sim-card-top">
+                          <div class="sim-icon-box sim-icon-box-inactive">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" style="color: #8078a8;">
+                              <rect x="6" y="2" width="12" height="20" rx="2.5" />
+                              <circle cx="12" cy="18.5" r="0.75" fill="currentColor" stroke="none" />
+                              <line x1="6" y1="4.5" x2="18" y2="4.5" stroke-width="0.75" />
+                            </svg>
+                          </div>
+                          <div class="sim-info">
+                            <div class="sim-name-row">
+                              <span class="sim-name">iPhone 16</span>
+                            </div>
+                            <p class="sim-os">iOS 26.0</p>
+                            <p class="sim-udid">B9C2E61D</p>
+                          </div>
+                        </div>
+                        <div class="sim-card-footer">
+                          <span class="sim-duration">Started 8m ago</span>
+                          <div class="sim-actions">
+                            <div class="sim-btn sim-btn-primary">
+                              <svg viewBox="0 0 16 16" fill="currentColor" width="8" height="8"><path d="M3 3.732a1.5 1.5 0 012.305-1.265l6.706 4.267a1.5 1.5 0 010 2.531L5.305 13.533A1.5 1.5 0 013 12.267V3.732z" /></svg>
+                              Start
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Right panel: video preview + buttons -->
+                    <div class="panel-right">
+                      <div class="viewer-row">
+                        <!-- Phone frame -->
+                        <div class="viewer-screen">
+                          <div class="viewer-stream-bg"></div>
+                          <div class="viewer-app-ui">
+                            <div class="viewer-status-bar">
+                              <span style="font-size: 5px; color: rgba(255,255,255,0.5);">9:41</span>
+                              <div style="display: flex; gap: 2px; align-items: center;">
+                                <div style="width: 8px; height: 4px; border-radius: 1px; border: 1px solid rgba(255,255,255,0.4);"><div style="width: 60%; height: 100%; background: rgba(255,255,255,0.4); border-radius: 0.5px;"></div></div>
+                              </div>
+                            </div>
+                            <div class="viewer-nav-bar">
+                              <div style="height: 4px; width: 50%; border-radius: 3px; background: rgba(255,255,255,0.25);"></div>
+                            </div>
+                            <div class="viewer-content-rows">
+                              <div style="height: 14px; border-radius: 3px; background: rgba(255,255,255,0.06);"></div>
+                              <div style="height: 4px; width: 80%; border-radius: 2px; background: rgba(255,255,255,0.12);"></div>
+                              <div style="height: 4px; width: 60%; border-radius: 2px; background: rgba(255,255,255,0.08);"></div>
+                              <div style="height: 20px; border-radius: 3px; background: rgba(255,255,255,0.05); margin-top: 2px;"></div>
+                              <div style="height: 4px; width: 70%; border-radius: 2px; background: rgba(255,255,255,0.10);"></div>
+                              <div style="height: 4px; width: 45%; border-radius: 2px; background: rgba(255,255,255,0.07);"></div>
+                            </div>
+                            <div class="viewer-tab-bar">
+                              <div style="width: 6px; height: 6px; border-radius: 1.5px; background: rgba(255,255,255,0.12);"></div>
+                              <div style="width: 6px; height: 6px; border-radius: 1.5px; background: rgba(124,58,237,0.4);"></div>
+                              <div style="width: 6px; height: 6px; border-radius: 1.5px; background: rgba(255,255,255,0.12);"></div>
+                              <div style="width: 6px; height: 6px; border-radius: 1.5px; background: rgba(255,255,255,0.12);"></div>
+                            </div>
+                          </div>
+                          <div class="viewer-scanline animate-scanline" style="animation-delay: -1.5s;"></div>
+                        </div>
+
+                        <!-- Control buttons column -->
+                        <div class="ctrl-buttons">
+                          <div class="ctrl-btn"><svg viewBox="0 0 20 20" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="12" height="12" rx="3.5" /></svg></div>
+                          <div class="ctrl-btn"><svg viewBox="0 0 20 20" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="11" r="5" /><line x1="10" y1="2" x2="10" y2="6" stroke-linecap="round" /></svg></div>
+                          <div class="ctrl-btn"><svg viewBox="0 0 20 20" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="8" y="3" width="4" height="14" rx="2" /></svg></div>
+                          <div style="height: 6px;"></div>
+                          <div class="ctrl-btn"><svg viewBox="0 0 14 16" width="11" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7V3.5a1 1 0 0 1 2 0V7m0 0V4.5a1 1 0 0 1 2 0V7m0 0V5.5a1 1 0 0 1 2 0V9a5 5 0 0 1-5 5H4A3 3 0 0 1 1 11V7.5a1 1 0 0 1 2 0V7" /></svg></div>
+                          <div class="ctrl-btn"><svg viewBox="0 0 12 14" width="10" height="11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1v12M3 4l3-3 3 3M3 10l3 3 3-3" /></svg></div>
+                          <div class="ctrl-btn"><svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3h8M6 3v7M4 10h4" /></svg></div>
+                        </div>
+                      </div>
+                      <!-- Viewer label -->
+                      <div class="viewer-label">
+                        <span class="viewer-label-name">iPhone 17 Pro</span>
+                        <span class="viewer-label-latency">48ms</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Scan line -->
+                <div class="scan-line animate-scanline"></div>
+              </div>
+            </div>
+
+            <!-- Stacked devices on the left -->
+            <div class="devices-stack animate-fade-in-up delay-400">
+              <!-- Device 1 — iPhone (top) -->
+              <div class="stacked-device stacked-device-top">
+                <div class="iphone-frame">
+                  <div class="iphone-island"></div>
+                  <div class="iphone-screen">
+                    <div class="iphone-stream-bg"></div>
+                    <div class="iphone-stream-lines">
+                      <div class="iphone-stream-line" style="width: 80%; opacity: 0.35;"></div>
+                      <div class="iphone-stream-line" style="width: 65%; opacity: 0.25;"></div>
+                      <div class="iphone-stream-line" style="width: 72%; opacity: 0.2;"></div>
+                      <div class="iphone-stream-app-bar"></div>
+                    </div>
+                    <div class="iphone-scanline animate-scanline"></div>
+                    <div class="iphone-live-badge">
+                      <span class="iphone-live-dot"></span>
+                      <span class="iphone-live-text">LIVE</span>
+                    </div>
+                    <div class="iphone-latency">42ms</div>
+                  </div>
+                  <div class="iphone-home-indicator"></div>
+                </div>
+              </div>
+
+              <!-- Device 2 — iPhone (bottom) -->
+              <div class="stacked-device stacked-device-bottom">
+                <div class="iphone-frame">
+                  <div class="iphone-island"></div>
+                  <div class="iphone-screen">
+                    <div class="iphone-stream-bg" style="animation-delay: -3s;"></div>
+                    <div class="iphone-stream-lines">
+                      <div class="iphone-stream-line" style="width: 70%; opacity: 0.3;"></div>
+                      <div class="iphone-stream-line" style="width: 55%; opacity: 0.2;"></div>
+                      <div style="margin-top: 4px; height: 32px; border-radius: 4px; background: rgba(255,255,255,0.06);"></div>
+                      <div class="iphone-stream-line" style="width: 85%; opacity: 0.15; margin-top: 3px;"></div>
+                    </div>
+                    <div class="iphone-scanline animate-scanline" style="animation-delay: -2s;"></div>
+                    <div class="iphone-live-badge">
+                      <span class="iphone-live-dot"></span>
+                      <span class="iphone-live-text">LIVE</span>
+                    </div>
+                    <div class="iphone-latency">38ms</div>
+                  </div>
+                  <div class="iphone-home-indicator"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo videos -->
+    <section class="demos-section" style="z-index: 10;">
+      <div class="demos-header">
+        <div class="demos-eyebrow">See it in action</div>
+        <h2 class="demos-title">From build to browser in seconds</h2>
+      </div>
+      <div class="demos-grid">
+        <div class="demo-card animate-fade-in-up" style="animation-delay: 400ms;">
+          <div class="demo-video-frame">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="/demos/streaming.mp4" type="video/mp4" />
+            </video>
+            <div class="demo-video-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" style="color: #7C3AED;"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none" opacity="0.6" /></svg>
+            </div>
+          </div>
+          <h3 class="demo-label">Live streaming</h3>
+          <p class="demo-desc">Capture any Simulator window and broadcast it over WebRTC in real time.</p>
+        </div>
+        <div class="demo-card animate-fade-in-up" style="animation-delay: 480ms;">
+          <div class="demo-video-frame">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="/demos/touch.mp4" type="video/mp4" />
+            </video>
+            <div class="demo-video-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" style="color: #7C3AED;"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none" opacity="0.6" /></svg>
+            </div>
+          </div>
+          <h3 class="demo-label">Remote touch</h3>
+          <p class="demo-desc">Click in the browser — the tap lands in the Simulator via accessibility APIs.</p>
+        </div>
+        <div class="demo-card animate-fade-in-up" style="animation-delay: 560ms;">
+          <div class="demo-video-frame">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="/demos/multi.mp4" type="video/mp4" />
+            </video>
+            <div class="demo-video-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" style="color: #7C3AED;"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none" opacity="0.6" /></svg>
+            </div>
+          </div>
+          <h3 class="demo-label">Multi-simulator</h3>
+          <p class="demo-desc">Run multiple simulators at once — each broadcasts independently.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section" style="z-index: 10;">
+      <div class="features-header">
+        <div class="features-eyebrow">Features</div>
+        <h2 class="features-title">Everything you need, nothing you don't</h2>
+      </div>
+
+      <div class="features-grid">
+        {features.map(({ title, desc, icon }, i) => (
+          <div class="gradient-border-card feature-card animate-fade-in-up" style={`animation-delay: ${(i % 3) * 80 + 400}ms;`}>
+            <div class="feature-card-header">
+              <div class="feature-icon" set:html={icon} />
+              <h3 class="feature-title">{title}</h3>
+            </div>
+            <p class="feature-desc">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Integrations -->
+    <section class="integrations-section" style="z-index: 10;">
+      <div class="integrations-header">
+        <div class="integrations-eyebrow">Integrations</div>
+        <h2 class="integrations-title">Part of the AI development stack</h2>
+        <p class="integrations-sub">SimCast is designed to work alongside the tools AI agents already use to build and automate iOS apps.</p>
+      </div>
+
+      <div class="integrations-grid">
+
+        <!-- XcodeBuildMCP -->
+        <div class="integration-card">
+          <div class="integration-banner">
+            <img src="https://github.com/getsentry/XcodeBuildMCP/raw/main/assets/banner.png" alt="XcodeBuildMCP — MCP server for Xcode build automation by Sentry" loading="lazy" />
+          </div>
+          <div class="integration-body">
+            <div class="integration-meta">
+              <span class="integration-tag">MCP Server</span>
+              <span class="integration-tag">by Sentry</span>
+            </div>
+            <h3 class="integration-name">XcodeBuildMCP</h3>
+            <p class="integration-desc">An MCP server that gives AI agents direct access to Xcode — build, install, launch, and test iOS apps in the Simulator without leaving the agent loop. Pair it with SimCast so your agent can build the app <em>and</em> watch it run.</p>
+            <div class="integration-workflow">
+              <div class="workflow-step">
+                <span class="workflow-num">1</span>
+                <span>Agent builds &amp; installs via XcodeBuildMCP</span>
+              </div>
+              <div class="workflow-step">
+                <span class="workflow-num">2</span>
+                <span>SimCast streams the live Simulator window</span>
+              </div>
+              <div class="workflow-step">
+                <span class="workflow-num">3</span>
+                <span>Agent observes, taps, and iterates</span>
+              </div>
+            </div>
+            <a href="https://github.com/getsentry/XcodeBuildMCP" class="integration-link" target="_blank" rel="noopener">
+              View on GitHub
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- AXe -->
+        <div class="integration-card integration-card--required">
+          <div class="integration-banner">
+            <img src="https://github.com/cameroncooke/AXe/raw/main/banner.png" alt="AXe — CLI tool for iOS Simulator touch injection by Cameron Cooke" loading="lazy" />
+          </div>
+          <div class="integration-body">
+            <div class="integration-meta">
+              <span class="integration-tag integration-tag--required">
+                <svg viewBox="0 0 12 12" fill="currentColor" width="9" height="9"><path d="M6 1a5 5 0 100 10A5 5 0 006 1zm.5 7.5h-1v-1h1v1zm0-2h-1V3.5h1V6.5z"/></svg>
+                Required
+              </span>
+              <span class="integration-tag">CLI Tool</span>
+              <span class="integration-tag">by Cameron Cooke</span>
+            </div>
+            <h3 class="integration-name">AXe</h3>
+            <p class="integration-desc">SimCast depends on AXe to translate remote interactions into real Simulator events. Install it with Homebrew and SimCast picks it up automatically — taps, gestures, hardware buttons, and text input all flow through it.</p>
+            <div class="integration-workflow">
+              <div class="workflow-step">
+                <span class="workflow-num">1</span>
+                <span>Web client sends tap via LiveKit data channel</span>
+              </div>
+              <div class="workflow-step">
+                <span class="workflow-num">2</span>
+                <span>SimCast macOS app receives the event</span>
+              </div>
+              <div class="workflow-step">
+                <span class="workflow-num">3</span>
+                <span>AXe injects it into the Simulator as a real touch</span>
+              </div>
+            </div>
+            <a href="https://github.com/cameroncooke/AXe" class="integration-link" target="_blank" rel="noopener">
+              View on GitHub
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Powered by -->
+    <section class="powered-section" style="z-index: 10;">
+      <div class="powered-header">
+        <div class="powered-eyebrow">Under the hood</div>
+        <h2 class="powered-title">Built on proven foundations</h2>
+        <p class="powered-sub">Apple frameworks for capture and encoding. LiveKit for real-time streaming. Supabase for auth and signaling. Tailscale for secure remote access.</p>
+      </div>
+
+      <div class="powered-grid">
+        <div class="powered-card">
+          <a href="https://developer.apple.com/documentation/screencapturekit" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
+            <img src="/screencapturekit-feature.png" alt="ScreenCaptureKit" class="powered-card-img" />
+          </a>
+          <h3 class="powered-card-title">ScreenCaptureKit</h3>
+          <p class="powered-card-desc">Captures individual Simulator windows with zero overhead. No desktop chrome, no other apps, no pixel wasted. Combined with VideoToolbox for hardware-accelerated H.264 encoding on Apple silicon.</p>
+        </div>
+        <div class="powered-card">
+          <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
+            <svg width="581" height="113" viewBox="0 0 581 113" fill="none" xmlns="http://www.w3.org/2000/svg" class="powered-card-svg powered-card-svg--wide"><path d="M151.397 66.7608C151.996 72.3621 157.091 81.9642 171.877 81.9642C184.764 81.9642 190.959 73.7624 190.959 65.7607C190.959 58.559 186.063 52.6577 176.373 50.6571L169.379 49.1569C166.682 48.6568 164.884 47.1565 164.884 44.7559C164.884 41.9552 167.681 39.8549 171.178 39.8549C176.772 39.8549 178.87 43.5556 179.27 46.4564L190.359 43.9558C189.76 38.6546 185.064 29.7527 171.078 29.7527C160.488 29.7527 152.696 37.0543 152.696 45.8561C152.696 52.7576 156.991 58.4591 166.482 60.5594L172.976 62.0598C176.772 62.8599 178.271 64.6605 178.271 66.8609C178.271 69.4615 176.173 71.762 171.777 71.762C165.983 71.762 163.085 68.1611 162.786 64.2602L151.397 66.7608Z" fill="currentColor"/><path d="M233.421 80.4639H246.109C245.909 78.7635 245.609 75.3628 245.609 71.5618V31.2529H232.321V59.8592C232.321 65.5606 228.925 69.5614 223.031 69.5614C216.837 69.5614 214.039 65.1604 214.039 59.6592V31.2529H200.752V62.3599C200.752 73.0622 207.545 81.7642 219.434 81.7642C224.628 81.7642 230.325 79.7638 233.022 75.1627C233.022 77.1631 233.221 79.4636 233.421 80.4639Z" fill="currentColor"/><path d="M273.076 99.4682V75.663C275.473 78.9636 280.469 81.6644 287.263 81.6644C301.149 81.6644 310.439 70.6617 310.439 55.7584C310.439 41.1553 302.148 30.1528 287.762 30.1528C280.37 30.1528 274.875 33.4534 272.677 37.2544V31.253H259.79V99.4682H273.076ZM297.352 55.8585C297.352 64.6606 291.958 69.7616 285.164 69.7616C278.372 69.7616 272.877 64.5605 272.877 55.8585C272.877 47.1566 278.372 42.0554 285.164 42.0554C291.958 42.0554 297.352 47.1566 297.352 55.8585Z" fill="currentColor"/><path d="M317.964 67.0609C317.964 74.7627 324.357 81.8643 334.848 81.8643C342.139 81.8643 346.835 78.4634 349.332 74.5625C349.332 76.463 349.532 79.1635 349.832 80.4639H362.02C361.72 78.7635 361.422 75.2627 361.422 72.6622V48.4567C361.422 38.5545 355.627 29.7527 340.043 29.7527C326.855 29.7527 319.761 38.2544 318.963 45.9562L330.751 48.4567C331.151 44.1558 334.348 40.455 340.141 40.455C345.737 40.455 348.434 43.3556 348.434 46.8564C348.434 48.5568 347.536 49.9572 344.738 50.3572L332.65 52.1576C324.458 53.3579 317.964 58.2589 317.964 67.0609ZM337.644 71.962C333.349 71.962 331.25 69.1614 331.25 66.2608C331.25 62.4599 333.947 60.5594 337.345 60.0594L348.434 58.359V60.5594C348.434 69.2615 343.239 71.962 337.644 71.962Z" fill="currentColor"/><path d="M387.703 80.4641V74.4627C390.299 78.6637 395.494 81.6644 402.288 81.6644C416.276 81.6644 425.467 70.5618 425.467 55.6585C425.467 41.0552 417.174 29.9528 402.788 29.9528C395.494 29.9528 390.1 33.1535 387.902 36.6541V8.04785H374.815V80.4641H387.703ZM412.178 55.7584C412.178 64.7605 406.784 69.7616 399.99 69.7616C393.297 69.7616 387.703 64.6606 387.703 55.7584C387.703 46.7564 393.297 41.8554 399.99 41.8554C406.784 41.8554 412.178 46.7564 412.178 55.7584Z" fill="currentColor"/><path d="M432.99 67.0609C432.99 74.7627 439.383 81.8643 449.873 81.8643C457.165 81.8643 461.862 78.4634 464.358 74.5625C464.358 76.463 464.559 79.1635 464.858 80.4639H477.046C476.748 78.7635 476.448 75.2627 476.448 72.6622V48.4567C476.448 38.5545 470.653 29.7527 455.068 29.7527C441.881 29.7527 434.788 38.2544 433.989 45.9562L445.776 48.4567C446.177 44.1558 449.374 40.455 455.167 40.455C460.763 40.455 463.46 43.3556 463.46 46.8564C463.46 48.5568 462.561 49.9572 459.763 50.3572L447.676 52.1576C439.484 53.3579 432.99 58.2589 432.99 67.0609ZM452.671 71.962C448.375 71.962 446.276 69.1614 446.276 66.2608C446.276 62.4599 448.973 60.5594 452.371 60.0594L463.46 58.359V60.5594C463.46 69.2615 458.265 71.962 452.671 71.962Z" fill="currentColor"/><path d="M485.645 66.7608C486.243 72.3621 491.339 81.9642 506.124 81.9642C519.012 81.9642 525.205 73.7624 525.205 65.7607C525.205 58.559 520.311 52.6577 510.62 50.6571L503.626 49.1569C500.929 48.6568 499.132 47.1565 499.132 44.7559C499.132 41.9552 501.928 39.8549 505.425 39.8549C511.021 39.8549 513.118 43.5556 513.519 46.4564L524.607 43.9558C524.007 38.6546 519.312 29.7527 505.326 29.7527C494.735 29.7527 486.944 37.0543 486.944 45.8561C486.944 52.7576 491.238 58.4591 500.73 60.5594L507.224 62.0598C511.021 62.8599 512.519 64.6605 512.519 66.8609C512.519 69.4615 510.421 71.762 506.025 71.762C500.23 71.762 497.334 68.1611 497.034 64.2602L485.645 66.7608Z" fill="currentColor"/><path d="M545.385 50.2571C545.685 45.7562 549.482 40.5549 556.375 40.5549C563.967 40.5549 567.165 45.3561 567.365 50.2571H545.385ZM568.664 63.0601C567.065 67.4609 563.668 70.5617 557.474 70.5617C550.88 70.5617 545.385 65.8606 545.087 59.3593H580.252C580.252 59.159 580.451 57.1587 580.451 55.2582C580.451 39.4547 571.361 29.7527 556.175 29.7527C543.588 29.7527 531.998 39.9548 531.998 55.6584C531.998 72.262 543.886 81.9642 557.374 81.9642C569.462 81.9642 577.255 74.8626 579.753 66.3607L568.664 63.0601Z" fill="currentColor"/><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint0_linear)"/><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint1_linear)" fill-opacity="0.2"/><path d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="#3ECF8E"/><defs><linearGradient id="paint0_linear" x1="53.9738" y1="54.974" x2="94.1635" y2="71.8295" gradientUnits="userSpaceOnUse"><stop stop-color="#249361"/><stop offset="1" stop-color="#3ECF8E"/></linearGradient><linearGradient id="paint1_linear" x1="36.1558" y1="30.578" x2="54.4844" y2="65.0806" gradientUnits="userSpaceOnUse"><stop/><stop offset="1" stop-opacity="0"/></linearGradient></defs></svg>
+          </a>
+          <h3 class="powered-card-title">Supabase</h3>
+          <p class="powered-card-desc">Handles authentication, real-time signaling, and presence. Stream commands flow through Postgres changes, simulator state syncs via Realtime channels, and screenshots land in Supabase Storage.</p>
+        </div>
+        <div class="powered-card">
+          <a href="https://github.com/livekit/client-sdk-swift" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
+            <svg viewBox="0 0 123 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="powered-card-svg"><g clip-path="url(#lk)"><path d="M4.6991 0H0V27.5637H17.0471V23.538H4.6991V0Z" fill="currentColor"/><path d="M24.8037 12.5483H20.2505V27.5626H24.8037V12.5483Z" fill="currentColor"/><path d="M38.2076 27.0186L32.4161 8.01416H27.8628L33.9461 27.563H42.4691L48.5523 8.01416H43.9623L38.2076 27.0186Z" fill="currentColor"/><path d="M59.8485 7.58105C53.9468 7.58105 50.1953 11.7886 50.1953 17.7724C50.1953 23.7206 53.8376 28.0002 59.8485 28.0002C64.4374 28.0002 67.7523 25.9691 68.9906 21.7981H64.3606C63.6691 23.684 62.393 24.8104 59.8798 24.8104C57.1116 24.8104 55.1818 22.8879 54.8177 19.1171H69.3147C69.384 18.6364 69.4201 18.1515 69.4228 17.6659C69.4239 11.5702 65.6356 7.58105 59.8485 7.58105ZM54.8533 15.9585C55.3277 12.4416 57.185 10.773 59.8485 10.773C62.6524 10.773 64.5465 12.8397 64.7658 15.9585H54.8533Z" fill="currentColor"/><path d="M96.048 0H90.1474L78.7103 12.6216V0H74.0112V27.5637H78.7103V13.6372L91.3132 27.5637H97.323L84.1376 13.0562L96.048 0Z" fill="currentColor"/><path d="M103.914 8.01416H99.3608V23.0284H103.914V8.01416Z" fill="currentColor"/><path d="M20.251 8.01416H15.6978V12.5477H20.251V8.01416Z" fill="currentColor"/><path d="M108.468 23.0298H103.915V27.5633H108.468V23.0298Z" fill="currentColor"/><path d="M122.073 23.0298H117.52V27.5633H122.073V23.0298Z" fill="currentColor"/><path d="M122.073 12.5484V8.0149H117.52V0H112.966V8.0149H108.413V12.5484H112.966V23.0302H117.52V12.5484H122.073Z" fill="currentColor"/></g><defs><clipPath id="lk"><rect width="123" height="28" fill="currentColor"/></clipPath></defs></svg>
+          </a>
+          <h3 class="powered-card-title">LiveKit</h3>
+          <p class="powered-card-desc">Publishes the H.264 track into a WebRTC room at 60 fps. The web dashboard subscribes instantly. Data channels carry touch events and commands bidirectionally over the same low-latency connection.</p>
+        </div>
+        <div class="powered-card">
+          <a href="https://tailscale.com" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
+            <svg viewBox="0 0 746 144" fill="none" xmlns="http://www.w3.org/2000/svg" class="powered-card-svg"><path fill="#fff" d="M18,90c9.9,0,18-8.1,18-18s-8.1-18-18-18S0,62.1,0,72s8.1,18,18,18Z"/><path fill="#fff" d="M72,90c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" d="M72,144c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" d="M126,90c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M18,144c9.9,0,18-8.1,18-18s-8.1-18-18-18S0,116.1,0,126s8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M126,144c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M18,36c9.9,0,18-8.1,18-18S27.9,0,18,0,0,8.1,0,18s8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M72,36c9.9,0,18-8.1,18-18S81.9,0,72,0s-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M126,36c9.9,0,18-8.1,18-18S135.9,0,126,0s-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" d="M237.5,126c4.7,0,8.5-.4,13.1-1.3v-17c-2.8,1-5.9,1.3-8.8,1.3-7.2,0-9.8-3.5-9.8-10.3v-34.6h18.6v-17h-18.6v-25.2h-20.5v25.2h-13.4v17h13.4v36.5c0,16.1,8.5,25.4,26.1,25.4Z"/><path fill="#fff" d="M284.1,126c11,0,18.3-3.7,22-9.4.3,2.5,1.2,5.9,2.3,7.9h18.5c-1-3.5-1.8-9.1-1.8-12.8v-40.2c0-16.6-11.9-26-32-26s-27.1,5.7-33.7,14.1l11.7,11.6c5.3-5.9,12-9,20.2-9s14.4,3.4,14.4,8.4-2.9,7.2-18.8,7.2-30.7,6.3-30.7,23.9,11.7,24.2,27.7,24.2ZM288.2,110.4c-7.9,0-11.6-3.4-11.6-9.4s4.4-8.8,11.7-8.8c11.7,0,15-.7,17.5-3.2v6.3c0,8.4-7,15.1-17.6,15.1Z"/><path fill="#fff" d="M338.5,37.2h21.4v-19.2h-21.4v19.2ZM339,124.5h20.5V47.1h-20.5v77.5Z"/><path fill="#fff" d="M374.5,124.5h20.5V20.3h-20.5v104.2Z"/><path fill="#fff" d="M437.7,126c22.6,0,34.2-11.9,34.2-24.4s-5.7-19.7-24.5-23c-13.2-2.3-21.4-5.3-21.4-9.8s4.7-6.7,12.6-6.7,12.9,2.3,17.3,7.5l13.1-11c-6.6-8.2-17.5-12.9-30.4-12.9-19.8,0-32.1,10.6-32.1,23.5s12.9,20.4,26.9,22.9c11.6,2.1,18,4.3,18,9.2s-4.5,7.8-13.2,7.8-15.1-4-18.2-9.8l-17.3,8.2c4.3,10.6,18.8,18.6,35.1,18.6Z"/><path fill="#fff" d="M517.8,126c14.7,0,25.2-5.9,33.2-19.1l-16.4-8.4c-3.1,6.2-8.1,10.4-16.7,10.4-13.1,0-20.1-10.6-20.1-23.3s7.5-23,20.1-23,13.2,4.3,16.3,10.7l16.6-8.8c-5.6-12.2-16.6-18.9-32.9-18.9-26.9,0-40.6,19.7-40.6,40.1s16.7,40.4,40.6,40.4Z"/><path fill="#fff" d="M583.7,126c11,0,18.3-3.7,22-9.4.3,2.5,1.2,5.9,2.3,7.9h18.5c-1-3.5-1.8-9.1-1.8-12.8v-40.2c0-16.6-11.9-26-32-26s-27.1,5.7-33.7,14.1l11.7,11.6c5.3-5.9,12-9,20.2-9s14.4,3.4,14.4,8.4-2.9,7.2-18.8,7.2-30.7,6.3-30.7,23.9,11.7,24.2,27.7,24.2ZM587.8,110.4c-7.9,0-11.6-3.4-11.6-9.4s4.4-8.8,11.7-8.8c11.7,0,15-.7,17.5-3.2v6.3c0,8.4-7,15.1-17.6,15.1Z"/><path fill="#fff" d="M636.8,124.5h20.5V20.3h-20.5v104.2Z"/><path fill="#fff" d="M706.7,126c15.1,0,27.3-6,34-16.7l-15.6-10c-4.1,6.5-9.5,10-18.5,10s-17.5-5.6-19.4-16.4h58.4v-7.2c0-20.4-12.5-40.1-39.2-40.1s-39.2,19.8-39.2,40.2c0,29.1,21.9,40.2,39.3,40.2ZM688.1,76.7c3.2-9.8,10-14.4,18.9-14.4s16.3,6,18.3,14.4h-37.3Z"/></svg>
+          </a>
+          <h3 class="powered-card-title">Tailscale</h3>
+          <p class="powered-card-desc">Access your Mac and SimCast dashboard from anywhere over a private, encrypted mesh network. No port forwarding, no VPN configuration — just install Tailscale and your devices are connected.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA banner -->
+    <section class="cta-section" style="z-index: 10;">
+      <div class="cta-banner">
+        <div class="cta-glow"></div>
+        <div class="cta-icon">
+          <img src="/SimCast.png" alt="SimCast" width="96" height="96" style="border-radius: 1.25rem;" />
+        </div>
+        <h2 class="cta-title">Open source. Self-hostable. MIT licensed.</h2>
+        <p class="cta-desc">Run SimCast on your own infrastructure. Audit the code, customize it, contribute back. No vendor lock-in, no usage limits.</p>
+        <a href={GITHUB_URL} class="cta-primary">
+          View on GitHub
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Author -->
+    <section class="author-section" style="z-index: 10;">
+      <div class="author-card">
+        <div class="author-eyebrow">Built by</div>
+        <h3 class="author-name">Florin Matinca</h3>
+        <p class="author-bio">iOS engineer passionate about developer tools, real-time systems, and making simulators more useful.</p>
+        <div class="author-links">
+          <a href="https://www.linkedin.com/in/florinmatinca/" target="_blank" rel="noopener noreferrer" class="author-link author-link--linkedin">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://x.com/florinmatinca" target="_blank" rel="noopener noreferrer" class="author-link author-link--x">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            @florinmatinca
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" style="z-index: 10;">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/SimCast.png" alt="SimCast" width="20" height="20" style="border-radius: 0.25rem;" />
+        </div>
+        <span class="footer-name">SimCast</span>
+        <span class="footer-license">· MIT License</span>
+      </div>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  /* ─── Utility classes ─── */
+  .fixed { position: fixed; }
+  .absolute { position: absolute; }
+  .relative { position: relative; }
+  .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+  .pointer-events-none { pointer-events: none; }
+
+  /* ─── Nav ─── */
+  .nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 0.625rem; }
+  .logo-icon {
+    width: 2.25rem; height: 2.25rem; border-radius: 0.5rem;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 20px rgba(123,82,255,0.4);
+  }
+  .logo-text { font-weight: 700; font-size: 1.125rem; letter-spacing: -0.025em; color: var(--text); }
+  .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+  .nav-pill {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.8rem; font-weight: 500; color: var(--text-2);
+    text-decoration: none; transition: all 0.2s;
+    padding: 0.375rem 0.75rem; border-radius: 9999px;
+    border: 1px solid rgba(123,82,255,0.2);
+    background: rgba(123,82,255,0.05);
+  }
+  .nav-pill:hover { color: var(--text); border-color: rgba(123,82,255,0.4); background: rgba(123,82,255,0.1); }
+  .nav-pill-badge {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 2px 6px; border-radius: 9999px;
+    background: rgba(123,82,255,0.2); color: var(--violet-2);
+  }
+  /* ─── Hero ─── */
+  .hero {
+    position: relative; max-width: 72rem; margin: 0 auto;
+    padding: 3rem 1.5rem 3rem;
+  }
+  @media (min-width: 1024px) { .hero { padding-top: 4rem; } }
+  .hero-grid { display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .hero-grid { grid-template-columns: 1fr 520px; gap: 4rem; } }
+
+  .hero-copy { display: flex; flex-direction: column; gap: 2rem; max-width: 36rem; }
+
+
+  .headline { line-height: 1.05; letter-spacing: -0.025em; font-weight: 800; font-size: clamp(2.8rem, 6vw, 4.5rem); }
+  .headline-accent {
+    font-family: var(--font-serif); font-style: italic; font-weight: 400;
+    background: linear-gradient(135deg, #A07BFF 0%, #00CFFF 60%, #A07BFF 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtext { font-size: 1.125rem; line-height: 1.75; color: var(--text-2); max-width: 36rem; }
+
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+  .cta-github {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem; border-radius: 0.75rem;
+    font-weight: 600; font-size: 0.875rem;
+    background: linear-gradient(135deg, #7B52FF, #5B3FD6);
+    color: #fff; border: none;
+    text-decoration: none; transition: opacity 0.2s;
+    box-shadow: 0 2px 12px rgba(123,82,255,0.35);
+  }
+  .cta-github:hover { opacity: 0.88; }
+
+  /* ─── Illustration ─── */
+  .hero-illustration { display: none; justify-content: center; align-items: center; }
+  @media (min-width: 1024px) { .hero-illustration { display: flex; } }
+
+  .illustration-wrapper { position: relative; }
+  .illustration-glow {
+    position: absolute; inset: -2rem; border-radius: 1.5rem; pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(123,82,255,0.18) 0%, transparent 70%);
+  }
+  .illustration-inner { position: relative; }
+
+  .browser-chrome {
+    border-radius: 1rem; overflow: hidden;
+    background: rgba(7,6,26,0.95);
+    border: 1px solid rgba(123,82,255,0.2);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.75), 0 0 0 1px rgba(123,82,255,0.12), inset 0 1px 0 rgba(255,255,255,0.05);
+    width: 600px;
+  }
+
+  .tab-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-subtle);
+    background: rgba(0,0,0,0.3);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 9999px; }
+  .address-bar {
+    margin-left: 0.75rem; flex: 1;
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.25rem 0.75rem; border-radius: 0.375rem;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+  }
+  .address-dot { width: 8px; height: 8px; border-radius: 9999px; background: rgba(123,82,255,0.5); }
+  .address-text { font-size: 10px; font-family: var(--font-mono); color: #8A87B0; }
+
+  .browser-content { padding: 0; display: flex; flex-direction: row; background: rgba(3,2,11,0.6); }
+  .panel-left { width: 45%; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.625rem; border-right: 1px solid var(--border-subtle); }
+  .panel-right { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.75rem; position: relative; background: rgba(0,0,0,0.3); }
+
+  .viewer-row { display: flex; align-items: center; gap: 8px; }
+
+  /* Viewer */
+  .viewer-screen {
+    position: relative; width: 110px; height: 232px;
+    border-radius: 14px; overflow: hidden;
+    background: #0a0918;
+    border: 1.5px solid rgba(123,82,255,0.3);
+    box-shadow: 0 0 20px rgba(123,82,255,0.1);
+  }
+  .viewer-stream-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg,
+      rgba(123,82,255,0.15) 0%,
+      rgba(0,100,160,0.12) 40%,
+      rgba(0,207,255,0.08) 70%,
+      rgba(40,10,80,0.14) 100%);
+    background-size: 200% 200%;
+    animation: stream-shimmer 5s ease-in-out infinite alternate;
+  }
+  .viewer-app-ui {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    padding: 4px;
+  }
+  .viewer-status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 2px 6px 3px; flex-shrink: 0;
+  }
+  .viewer-nav-bar {
+    padding: 4px 6px 6px; flex-shrink: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .viewer-content-rows {
+    flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 6px;
+  }
+  .viewer-tab-bar {
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 4px 8px 6px; flex-shrink: 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .viewer-scanline {
+    position: absolute; left: 0; right: 0; height: 1px; pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(123,82,255,0.6), rgba(0,207,255,0.6), transparent);
+    box-shadow: 0 0 6px rgba(123,82,255,0.4);
+  }
+  .viewer-label {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 6px;
+  }
+  .viewer-label-name { font-size: 8px; font-weight: 600; color: #EDE9FF; }
+  .viewer-label-latency {
+    font-size: 7px; font-weight: 600; font-family: var(--font-mono);
+    color: rgba(0,207,255,0.9);
+    background: rgba(0,207,255,0.08); border: 1px solid rgba(0,207,255,0.2);
+    border-radius: 999px; padding: 1px 5px;
+  }
+
+  /* Control buttons */
+  .ctrl-buttons { display: flex; flex-direction: column; gap: 3px; }
+  .ctrl-btn {
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    color: #8078a8;
+  }
+
+  /* Section header */
+  .section-header { display: flex; align-items: center; gap: 6px; padding: 0 0.25rem; }
+  .section-title { font-size: 8px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8078a8; }
+  .section-badge {
+    font-size: 8px; font-weight: 700; padding: 0px 5px; border-radius: 4px;
+    background: rgba(124,58,237,0.18); border: 1px solid rgba(124,58,237,0.25); color: #C4AAFF;
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border-subtle); }
+  .section-uptime { font-size: 8px; color: #8078a8; }
+
+  /* Simulator cards */
+  .sim-card { border-radius: 0.75rem; overflow: hidden; transition: all 0.2s; }
+  .sim-card-active {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #7C3AED;
+    box-shadow: 0 0 12px rgba(124,58,237,0.2), 0 0 4px rgba(124,58,237,0.12);
+  }
+  .sim-card-streaming {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid transparent;
+  }
+  .sim-card-inactive {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid transparent;
+  }
+
+  .sim-card-top { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.625rem 0.625rem 0.5rem; border-bottom: 1px solid var(--border-subtle); }
+
+  .sim-icon-box {
+    flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(124,58,237,0.18); border: 1px solid rgba(124,58,237,0.25);
+  }
+  .sim-icon-box-inactive {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sim-info { flex: 1; min-width: 0; }
+  .sim-name-row { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+  .sim-name { font-size: 10px; font-weight: 600; color: #EDE9FF; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .streaming-badge {
+    display: flex; align-items: center; gap: 3px; flex-shrink: 0;
+    font-size: 7px; font-weight: 700; letter-spacing: 0.02em;
+    padding: 1px 5px; border-radius: 9999px;
+    background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2); color: #10B981;
+  }
+  .streaming-dot { width: 3px; height: 3px; border-radius: 9999px; background: #4ade80; animation: pulse 2s ease-in-out infinite; }
+
+  .watching-badge {
+    display: flex; align-items: center; gap: 3px; flex-shrink: 0;
+    font-size: 7px; font-weight: 700; letter-spacing: 0.02em;
+    padding: 1px 5px; border-radius: 9999px;
+    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3); color: #7C3AED;
+  }
+
+  .sim-os { font-size: 8px; color: #8A87B0; margin: 0; }
+  .sim-udid { font-size: 7px; font-family: var(--font-mono); letter-spacing: 0.06em; color: #8078a8; margin: 2px 0 0; }
+
+  /* Card footer */
+  .sim-card-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.375rem 0.625rem; }
+  .sim-duration { font-size: 7px; color: #8078a8; }
+  .sim-actions { display: flex; align-items: center; gap: 6px; }
+
+  .sim-watch-hint {
+    display: flex; align-items: center; gap: 3px;
+    font-size: 7px; color: #8078a8;
+  }
+
+  .sim-btn {
+    display: flex; align-items: center; gap: 3px;
+    padding: 2px 8px; border-radius: 6px;
+    font-size: 8px; font-weight: 600;
+  }
+  .sim-btn-danger {
+    background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.2); color: #f87171;
+  }
+  .sim-btn-primary {
+    background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.3); color: #C4AAFF;
+  }
+
+  .scan-line {
+    position: absolute; left: 0; right: 0; height: 1px; pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(123,82,255,0.8), rgba(0,207,255,0.8), transparent);
+    box-shadow: 0 0 8px rgba(123,82,255,0.6);
+  }
+
+  .macos-pill {
+    position: absolute; right: -2.5rem; bottom: 2rem;
+    display: flex; align-items: center; gap: 0.625rem;
+    padding: 0.5rem 0.75rem; border-radius: 0.75rem;
+    background: rgba(7,6,26,0.9); border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+  }
+  .macos-pill-icon {
+    width: 24px; height: 24px; border-radius: 0.375rem; flex-shrink: 0;
+    background: linear-gradient(135deg, #7B52FF, #00CFFF);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .macos-pill-icon svg { width: 14px; height: 14px; }
+  .macos-pill-title { font-size: 10px; font-weight: 600; color: #EDE9FF; }
+  .macos-pill-sub { font-size: 9px; color: #8A87B0; }
+
+  .webrtc-badge {
+    position: absolute; right: -1.5rem; top: 15%;
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 0.75rem;
+    background: rgba(7,6,26,0.9); border: 1px solid rgba(0,207,255,0.15);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4); backdrop-filter: blur(8px);
+  }
+  .webrtc-dot { width: 6px; height: 6px; border-radius: 9999px; background: #22d3ee; animation: pulse 2s ease-in-out infinite; }
+  .webrtc-text { font-size: 10px; font-weight: 500; color: #00CFFF; }
+
+  /* ─── iPhone stream device ─── */
+
+  @keyframes stream-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes iphone-float {
+    0%, 100% { transform: rotateX(-2deg) rotateY(12deg) translateY(0px); }
+    50%       { transform: rotateX(-2deg) rotateY(12deg) translateY(-10px); }
+  }
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  /* Stacked devices */
+  .devices-stack {
+    position: absolute;
+    left: -5.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 88px;
+    height: 188px;
+  }
+  .stacked-device {
+    position: absolute;
+    left: 0;
+  }
+  .stacked-device-bottom {
+    top: 30px;
+    left: 36px;
+    transform: rotate(2deg);
+    z-index: 1;
+    animation: iphone-float 7s ease-in-out 2.4s infinite;
+  }
+  .stacked-device-bottom .iphone-frame {
+    opacity: 0.65;
+    border-color: rgba(123,82,255,0.2);
+  }
+  .stacked-device-top {
+    top: -60px;
+    transform: rotate(-1.5deg);
+    z-index: 2;
+    animation: iphone-float 7s ease-in-out 1.2s infinite;
+  }
+
+  .iphone-device {
+    position: absolute;
+    left: -5rem;
+    top: 44%;
+    transform: translateY(-50%);
+    perspective: 900px;
+    z-index: 10;
+    display: none;
+  }
+
+  .iphone-frame {
+    width: 88px;
+    height: 188px;
+    border-radius: 22px;
+    background: linear-gradient(160deg, #1c1a2e 0%, #0e0d1f 60%, #18162d 100%);
+    border: 2px solid rgba(123,82,255,0.45);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 20px 50px rgba(0,0,0,0.7),
+      0 0 30px rgba(123,82,255,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 5px 8px;
+    animation: iphone-float 7s ease-in-out 1.2s infinite;
+  }
+
+  .iphone-island {
+    width: 28px; height: 8px;
+    border-radius: 999px;
+    background: #000;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  .iphone-screen {
+    flex: 1;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: #050410;
+  }
+
+  .iphone-stream-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(123,82,255,0.22) 0%,
+      rgba(0,100,160,0.18) 40%,
+      rgba(0,207,255,0.12) 70%,
+      rgba(40,10,80,0.2) 100%
+    );
+    background-size: 200% 200%;
+    animation: stream-shimmer 5s ease-in-out infinite alternate;
+  }
+
+  .iphone-stream-lines {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 16px 8px 8px;
+  }
+
+  .iphone-stream-line {
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.18);
+  }
+
+  .iphone-stream-app-bar {
+    margin-top: auto;
+    height: 22px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    width: 100%;
+  }
+
+  .iphone-scanline {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,207,255,0.5), transparent);
+    pointer-events: none;
+  }
+
+  .iphone-live-badge {
+    position: absolute;
+    top: 7px; right: 6px;
+    display: flex; align-items: center; gap: 3px;
+    background: rgba(220,38,38,0.85);
+    border-radius: 999px;
+    padding: 2px 5px;
+    backdrop-filter: blur(4px);
+  }
+
+  .iphone-live-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    animation: live-pulse 1.4s ease-in-out infinite;
+  }
+
+  .iphone-live-text {
+    font-size: 6px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+
+  .iphone-latency {
+    position: absolute;
+    bottom: 7px; left: 6px;
+    font-size: 6px;
+    font-weight: 600;
+    color: rgba(0,207,255,0.9);
+    background: rgba(0,207,255,0.08);
+    border: 1px solid rgba(0,207,255,0.2);
+    border-radius: 999px;
+    padding: 1px 5px;
+  }
+
+  .iphone-home-indicator {
+    width: 28px; height: 3px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.2);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  /* ─── Demos ─── */
+  .demos-section {
+    position: relative; max-width: 72rem; margin: 0 auto;
+    padding: 4rem 1.5rem 2rem;
+  }
+  .demos-header { text-align: center; margin-bottom: 3rem; }
+  .demos-eyebrow {
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--violet-2); margin-bottom: 0.75rem;
+  }
+  .demos-title {
+    font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700;
+    color: var(--text); line-height: 1.3;
+  }
+  .demos-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  @media (max-width: 768px) {
+    .demos-grid { grid-template-columns: 1fr; }
+  }
+  .demo-card {
+    border-radius: 1rem; overflow: hidden;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-subtle);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .demo-card:hover {
+    border-color: rgba(123,82,255,0.3);
+    box-shadow: 0 0 24px rgba(123,82,255,0.08);
+  }
+  .demo-video-frame {
+    position: relative; width: 100%; aspect-ratio: 16 / 10;
+    background: rgba(0,0,0,0.4); overflow: hidden;
+  }
+  .demo-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
+  .demo-video-placeholder {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, rgba(123,82,255,0.08) 0%, rgba(0,207,255,0.04) 100%);
+  }
+  .demo-video:not([src=""]) + .demo-video-placeholder { display: none; }
+  .demo-label {
+    font-size: 0.9375rem; font-weight: 600; color: var(--text);
+    padding: 1rem 1rem 0.25rem;
+  }
+  .demo-desc {
+    font-size: 0.8125rem; color: var(--text-2); line-height: 1.5;
+    padding: 0 1rem 1rem;
+  }
+
+  /* ─── Features ─── */
+  .features-section {
+    position: relative; max-width: 72rem; margin: 0 auto;
+    padding: 3rem 1.5rem;   }
+  .features-header { text-align: center; margin-bottom: 3.5rem; }
+  .features-eyebrow {
+    display: inline-block; margin-bottom: 0.75rem;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--violet-2);
+  }
+  .features-title { font-weight: 700; letter-spacing: -0.025em; margin-bottom: 0.75rem; font-size: clamp(1.75rem, 4vw, 2.5rem); }
+  .features-sub { color: var(--text-2); font-size: 1rem; }
+
+  .features-grid { display: grid; gap: 1rem; }
+  @media (min-width: 640px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .feature-card { border-radius: 1rem; padding: 1.25rem; transition: all 0.2s; }
+  .feature-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .feature-icon {
+    width: 2rem; height: 2rem; border-radius: 0.5rem;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    background: rgba(123,82,255,0.12); color: #A07BFF;
+  }
+  .feature-title { font-weight: 600; font-size: 0.875rem; color: var(--text); }
+  .feature-desc { font-size: 0.875rem; line-height: 1.625; color: var(--text-2); }
+
+  /* ─── Agents section ─── */
+  /* ─── Integrations ─── */
+  .integrations-section {
+    position: relative; max-width: 72rem; margin: 0 auto;
+    padding: 3rem 1.5rem;   }
+  .integrations-header { text-align: center; margin-bottom: 3.5rem; }
+  .integrations-eyebrow {
+    display: inline-block; margin-bottom: 0.75rem;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--violet-2);
+  }
+  .integrations-title { font-weight: 700; letter-spacing: -0.025em; margin-bottom: 0.75rem; font-size: clamp(1.75rem, 4vw, 2.5rem); }
+  .integrations-sub { color: var(--text-2); font-size: 1rem; max-width: 42rem; margin: 0 auto; }
+
+  .integrations-grid { display: grid; gap: 1.5rem; }
+  @media (min-width: 768px) { .integrations-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .integration-card {
+    border-radius: 1rem; overflow: hidden;
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                linear-gradient(135deg, rgba(123,82,255,0.3), rgba(0,207,255,0.12), rgba(123,82,255,0.06)) border-box;
+    border: 1px solid transparent;
+    display: flex; flex-direction: column;
+  }
+  .integration-banner { width: 100%; aspect-ratio: 3 / 1; overflow: hidden; background: #07061a; }
+  .integration-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .integration-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.875rem; flex: 1; }
+
+  .integration-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .integration-tag {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 9999px;
+    background: rgba(123,82,255,0.1); border: 1px solid rgba(123,82,255,0.2); color: var(--violet-2);
+  }
+  .integration-name { font-weight: 700; font-size: 1.25rem; color: var(--text); }
+  .integration-desc { font-size: 0.9rem; line-height: 1.7; color: var(--text-2); }
+  .integration-desc em { font-style: italic; color: var(--text); }
+
+  .integration-workflow { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.75rem; border-radius: 0.5rem; background: rgba(123,82,255,0.05); border: 1px solid var(--border-subtle); }
+  .workflow-step { display: flex; align-items: baseline; gap: 0.625rem; font-size: 0.8rem; color: var(--text-2); }
+  .workflow-num {
+    flex-shrink: 0; width: 18px; height: 18px; border-radius: 9999px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 700;
+    background: rgba(123,82,255,0.15); color: var(--violet-2);
+  }
+
+  .integration-card--required {
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                linear-gradient(135deg, rgba(251,191,36,0.5), rgba(245,158,11,0.2), rgba(123,82,255,0.15)) border-box;
+  }
+  .integration-tag--required {
+    background: rgba(251,191,36,0.12);
+    border-color: rgba(251,191,36,0.35);
+    color: #d97706;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+
+
+  .integration-link {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 0.25rem;
+    font-size: 0.875rem; font-weight: 500; color: var(--violet-2); text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .integration-link:hover { opacity: 0.75; }
+
+  /* ─── Powered by section ─── */
+  .powered-section {
+    position: relative; max-width: 72rem; margin: 0 auto;
+    padding: 3rem 1.5rem;   }
+  .powered-header { text-align: center; margin-bottom: 3.5rem; }
+  .powered-eyebrow {
+    display: inline-block; margin-bottom: 0.75rem;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--violet-2);
+  }
+  .powered-title { font-weight: 700; letter-spacing: -0.025em; margin-bottom: 0.75rem; font-size: clamp(1.75rem, 4vw, 2.5rem); }
+  .powered-sub { color: var(--text-2); font-size: 1rem; max-width: 42rem; margin: 0 auto; }
+
+  .powered-grid { display: grid; gap: 1.5rem; }
+  @media (min-width: 768px) { .powered-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .powered-card {
+    border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
+    background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                linear-gradient(135deg, rgba(123,82,255,0.3), rgba(0,207,255,0.12), rgba(123,82,255,0.06)) border-box;
+    border: 1px solid transparent;
+    height: 100%;
+  }
+  .powered-card-img-link {
+    display: flex; align-items: center; justify-content: center;
+    height: 140px; border-radius: 0.75rem; overflow: hidden;
+    transition: transform 0.2s; flex-shrink: 0;
+  }
+  .powered-card-img-link:hover { transform: scale(1.03); }
+
+  .powered-card-logo-wrap { background: #1a1a2e; }
+  .powered-card-img {
+    width: auto; height: 100%; max-width: 100%; object-fit: contain;
+  }
+  .powered-card-svg { width: 140px; height: auto; color: #fff; }
+  .powered-card-svg--wide { width: 200px; }
+  .powered-card-title { font-weight: 700; font-size: 1.25rem; color: var(--text); margin: 0; }
+  .powered-card-desc { font-size: 0.9rem; line-height: 1.7; color: var(--text-2); margin: 0; flex: 1; }
+
+  /* ─── CTA ─── */
+  .cta-section { position: relative; max-width: 72rem; margin: 0 auto; padding: 4rem 1.5rem; }
+  .cta-banner {
+    border-radius: 1.5rem; padding: 3rem 2rem; text-align: center;
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, rgba(123,82,255,0.1) 0%, rgba(0,207,255,0.05) 100%);
+    border: 1px solid rgba(123,82,255,0.2);
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  }
+  .cta-glow {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 24rem; height: 8rem; pointer-events: none;
+    background: radial-gradient(ellipse at top, rgba(123,82,255,0.25) 0%, transparent 70%);
+  }
+  .cta-icon {
+    position: relative; width: 96px; height: 96px; border-radius: 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cta-title { font-weight: 700; font-size: clamp(1.5rem, 3vw, 1.875rem); color: var(--text); position: relative; margin: 0; }
+  .cta-desc { color: var(--text-2); position: relative; max-width: 32rem; margin: 0; line-height: 1.6; }
+  .cta-primary {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.75rem; border-radius: 0.75rem;
+    font-weight: 600; font-size: 0.9rem;
+    background: linear-gradient(135deg, #7B52FF, #5B3FD6);
+    color: #fff; border: none; text-decoration: none;
+    box-shadow: 0 2px 16px rgba(123,82,255,0.35);
+    transition: opacity 0.2s, transform 0.15s;
+    margin-top: 0.5rem;
+  }
+  .cta-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* ─── Author ─── */
+  .author-section {
+    position: relative; max-width: 72rem; margin: 0 auto;
+    padding: 0 1.5rem 2rem; display: flex; justify-content: center;
+  }
+  .author-card {
+    text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+    max-width: 28rem;
+  }
+  .author-eyebrow {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--violet-2);
+  }
+  .author-name { font-weight: 700; font-size: 1.5rem; color: var(--text); margin: 0; }
+  .author-bio { font-size: 0.9rem; line-height: 1.6; color: var(--text-2); margin: 0; }
+  .author-links { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.25rem; }
+  .author-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.85rem; font-weight: 500; color: var(--text-2);
+    text-decoration: none; transition: all 0.2s;
+    padding: 0.5rem 1rem; border-radius: 0.625rem;
+    border: 1px solid var(--border-subtle);
+    background: rgba(255,255,255,0.02);
+  }
+  .author-link:hover { color: var(--text); border-color: rgba(123,82,255,0.3); background: rgba(123,82,255,0.06); }
+  .author-link--linkedin:hover { color: #0A66C2; border-color: rgba(10,102,194,0.4); }
+  .author-link--x:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ─── Footer ─── */
+  .footer {
+    position: relative; max-width: 72rem; margin: 0 auto;
+    padding: 2rem 1.5rem; display: flex; align-items: center; justify-content: center;
+      }
+  .footer-brand { display: flex; align-items: center; gap: 0.5rem; }
+  .footer-logo {
+    width: 20px; height: 20px; border-radius: 0.375rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .footer-name { font-weight: 600; font-size: 0.875rem; color: var(--text-2); }
+  .footer-license { font-size: 0.875rem; color: var(--text-3); }
+</style>
