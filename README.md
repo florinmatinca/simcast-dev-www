@@ -1,6 +1,6 @@
 # SimCast Website
 
-Marketing and landing page for [simcast.dev](https://simcast.dev) — the open-source iOS Simulator streaming tool.
+> Stream any iOS Simulator, anywhere — marketing site for SimCast, the open-source iOS Simulator streaming tool. Built with Astro.
 
 ## Tech Stack
 
