@@ -5,40 +5,40 @@ const GITHUB_URL = "https://github.com/simcast-dev/simcast";
 
 const features = [
   {
-    title: "Window-level capture",
-    desc: "ScreenCaptureKit captures only the Simulator window — no full-screen recording, no distractions, no accidental screen shares.",
-    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M2 4.25A2.25 2.25 0 014.25 2h11.5A2.25 2.25 0 0118 4.25v8.5A2.25 2.25 0 0115.75 15H13.5v1.25a.75.75 0 01-.75.75H7.25a.75.75 0 01-.75-.75V15H4.25A2.25 2.25 0 012 12.75v-8.5z" clip-rule="evenodd" /></svg>`,
+    title: "Instant browser access",
+    desc: "Anyone with a link can see and control your Simulator — no installs, no plugins, no screen sharing needed.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zm4.03 6.28a.75.75 0 00-1.06-1.06L4.97 9.47a.75.75 0 000 1.06l2.25 2.25a.75.75 0 001.06-1.06L6.56 10l1.72-1.72zm3.44-1.06a.75.75 0 10-1.06 1.06L12.44 10l-1.72 1.72a.75.75 0 101.06 1.06l2.25-2.25a.75.75 0 000-1.06l-2.25-2.25z" clip-rule="evenodd" /></svg>`,
   },
   {
-    title: "H.264 over WebRTC",
-    desc: "Hardware-accelerated H.264 encoding via VideoToolbox, streamed over LiveKit WebRTC. Sub-100ms latency, no browser plugins.",
-    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path d="M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z" /></svg>`,
-  },
-  {
-    title: "Remote touch injection",
-    desc: "Click in the browser — the tap lands in the simulator via macOS accessibility APIs. Real interaction, not a VNC hack.",
+    title: "Real touch & gestures",
+    desc: "Tap, swipe, scroll, and long-press — interact with the app like you're holding the device, powered by native accessibility APIs.",
     icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 101.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z" clip-rule="evenodd" /></svg>`,
   },
   {
-    title: "Ephemeral sessions",
-    desc: "Zero data stored. Sessions exist only while the macOS app is running — auto-cleaned on quit. Privacy by design.",
-    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M10 1a9 9 0 100 18A9 9 0 0010 1zm0 2a7 7 0 110 14A7 7 0 0110 3zm0 10.5a1 1 0 100-2 1 1 0 000 2zm.75-5.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z" clip-rule="evenodd" /></svg>`,
+    title: "Full device control",
+    desc: "Type text, press Home, Lock, or Side buttons, and open deep links — everything you'd do locally, from anywhere.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path d="M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z" /></svg>`,
   },
   {
     title: "Multi-simulator",
-    desc: "Run multiple simulators at once. Each broadcasts independently and appears as its own card in the live dashboard.",
+    desc: "Stream multiple simulators at once — QA across devices in parallel from a single dashboard.",
     icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path d="M2 4.5A2.5 2.5 0 014.5 2h11A2.5 2.5 0 0118 4.5v3a2.5 2.5 0 01-2.5 2.5h-11A2.5 2.5 0 012 7.5v-3zM2 12.5A2.5 2.5 0 014.5 10h4a2.5 2.5 0 012.5 2.5V14a2.5 2.5 0 01-2.5 2.5h-4A2.5 2.5 0 012 14v-1.5zM13 12.5A2.5 2.5 0 0115.5 10H16a2.5 2.5 0 012.5 2.5V14A2.5 2.5 0 0116 16.5h-.5A2.5 2.5 0 0113 14v-1.5z" /></svg>`,
   },
   {
-    title: "Open source",
-    desc: "MIT licensed. Self-host everything — macOS app, web client, backend. Audit it, fork it, ship it.",
+    title: "Window-level capture",
+    desc: "Only the Simulator window is captured — no desktop, no distractions, no accidental screen shares.",
+    icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M2 4.25A2.25 2.25 0 014.25 2h11.5A2.25 2.25 0 0118 4.25v8.5A2.25 2.25 0 0115.75 15H13.5v1.25a.75.75 0 01-.75.75H7.25a.75.75 0 01-.75-.75V15H4.25A2.25 2.25 0 012 12.75v-8.5z" clip-rule="evenodd" /></svg>`,
+  },
+  {
+    title: "Open source & self-hosted",
+    desc: "MIT licensed. Runs on your infrastructure — no third-party accounts, no usage limits, no data leaving your network.",
     icon: `<svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clip-rule="evenodd" /></svg>`,
   },
 ];
 
 ---
 
-<Layout title="SimCast — iOS Simulator Streaming" description="Stream iOS Simulators live from your Mac to any browser, with real-time touch interaction over WebRTC.">
+<Layout title="SimCast — Simulator Streaming" description="Stream Simulators live from your Mac to any browser, with real-time touch interaction over WebRTC.">
   <main style="background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden;">
 
     <!-- Gradient mesh — top bloom -->
@@ -60,8 +60,7 @@ const features = [
         <span class="logo-text">SimCast</span>
       </div>
       <div class="nav-links">
-        <a href="https://github.com/simcast-dev/simcast/discussions" class="nav-pill" rel="noopener noreferrer">Blog</a>
-        <a href="https://github.com/simcast-dev/simcast/releases" class="nav-pill" rel="noopener noreferrer">Changelog for v0.1</a>
+        <a href="https://github.com/simcast-dev/simcast/releases/tag/v1.0.0" class="nav-pill" rel="noopener noreferrer">Check out Release 1.0.0</a>
       </div>
     </nav>
 
@@ -73,13 +72,13 @@ const features = [
         <div class="hero-copy">
           <div class="animate-fade-in-up">
             <h1 class="headline">
-              Stream any iOS Simulator,{" "}
+              Stream any Simulator,{" "}
               <span class="headline-accent">anywhere.</span>
             </h1>
           </div>
 
           <p class="subtext animate-fade-in-up delay-200">
-            Capture any Simulator window on your Mac, encode it to H.264, and broadcast it over WebRTC to any browser — with real-time touch interaction. No plugins. No VNC. No compromises.
+            Your Simulator, live in any browser.<br>See it, touch it, test it.
           </p>
 
           <div class="cta-row animate-fade-in-up delay-300">
@@ -354,7 +353,7 @@ const features = [
             </div>
           </div>
           <h3 class="demo-label">Live streaming</h3>
-          <p class="demo-desc">Capture any Simulator window and broadcast it over WebRTC in real time.</p>
+          <p class="demo-desc">One simulator or ten — each window gets its own H.264 stream, broadcast over WebRTC the moment you hit Start.</p>
         </div>
         <div class="demo-card animate-fade-in-up" style="animation-delay: 480ms;">
           <div class="demo-video-frame">
@@ -366,19 +365,19 @@ const features = [
             </div>
           </div>
           <h3 class="demo-label">Remote touch</h3>
-          <p class="demo-desc">Click in the browser — the tap lands in the Simulator via accessibility APIs.</p>
+          <p class="demo-desc">Tap, swipe, and scroll right from the browser. Every gesture lands in the Simulator as a native event — no VNC, no lag.</p>
         </div>
         <div class="demo-card animate-fade-in-up" style="animation-delay: 560ms;">
           <div class="demo-video-frame">
             <video class="demo-video" autoplay loop muted playsinline>
-              <source src="/demos/multi.mp4" type="video/mp4" />
+              <source src="/demos/advanced.mp4" type="video/mp4" />
             </video>
             <div class="demo-video-placeholder">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" style="color: #7C3AED;"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none" opacity="0.6" /></svg>
             </div>
           </div>
-          <h3 class="demo-label">Multi-simulator</h3>
-          <p class="demo-desc">Run multiple simulators at once — each broadcasts independently.</p>
+          <h3 class="demo-label">Advanced features</h3>
+          <p class="demo-desc">Type with the keyboard, capture screenshots, record video, and fire push notifications — all without leaving the dashboard.</p>
         </div>
       </div>
     </section>
@@ -387,7 +386,7 @@ const features = [
     <section class="features-section" style="z-index: 10;">
       <div class="features-header">
         <div class="features-eyebrow">Features</div>
-        <h2 class="features-title">Everything you need, nothing you don't</h2>
+        <h2 class="features-title">Your Simulator, accessible everywhere</h2>
       </div>
 
       <div class="features-grid">
@@ -491,7 +490,7 @@ const features = [
       <div class="powered-header">
         <div class="powered-eyebrow">Under the hood</div>
         <h2 class="powered-title">Built on proven foundations</h2>
-        <p class="powered-sub">Apple frameworks for capture and encoding. LiveKit for real-time streaming. Supabase for auth and signaling. Tailscale for secure remote access.</p>
+        <p class="powered-sub">Apple frameworks for capture and encoding. LiveKit for real-time streaming. Supabase for auth and signaling.</p>
       </div>
 
       <div class="powered-grid">
@@ -503,13 +502,6 @@ const features = [
           <p class="powered-card-desc">Captures individual Simulator windows with zero overhead. No desktop chrome, no other apps, no pixel wasted. Combined with VideoToolbox for hardware-accelerated H.264 encoding on Apple silicon.</p>
         </div>
         <div class="powered-card">
-          <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
-            <svg width="581" height="113" viewBox="0 0 581 113" fill="none" xmlns="http://www.w3.org/2000/svg" class="powered-card-svg powered-card-svg--wide"><path d="M151.397 66.7608C151.996 72.3621 157.091 81.9642 171.877 81.9642C184.764 81.9642 190.959 73.7624 190.959 65.7607C190.959 58.559 186.063 52.6577 176.373 50.6571L169.379 49.1569C166.682 48.6568 164.884 47.1565 164.884 44.7559C164.884 41.9552 167.681 39.8549 171.178 39.8549C176.772 39.8549 178.87 43.5556 179.27 46.4564L190.359 43.9558C189.76 38.6546 185.064 29.7527 171.078 29.7527C160.488 29.7527 152.696 37.0543 152.696 45.8561C152.696 52.7576 156.991 58.4591 166.482 60.5594L172.976 62.0598C176.772 62.8599 178.271 64.6605 178.271 66.8609C178.271 69.4615 176.173 71.762 171.777 71.762C165.983 71.762 163.085 68.1611 162.786 64.2602L151.397 66.7608Z" fill="currentColor"/><path d="M233.421 80.4639H246.109C245.909 78.7635 245.609 75.3628 245.609 71.5618V31.2529H232.321V59.8592C232.321 65.5606 228.925 69.5614 223.031 69.5614C216.837 69.5614 214.039 65.1604 214.039 59.6592V31.2529H200.752V62.3599C200.752 73.0622 207.545 81.7642 219.434 81.7642C224.628 81.7642 230.325 79.7638 233.022 75.1627C233.022 77.1631 233.221 79.4636 233.421 80.4639Z" fill="currentColor"/><path d="M273.076 99.4682V75.663C275.473 78.9636 280.469 81.6644 287.263 81.6644C301.149 81.6644 310.439 70.6617 310.439 55.7584C310.439 41.1553 302.148 30.1528 287.762 30.1528C280.37 30.1528 274.875 33.4534 272.677 37.2544V31.253H259.79V99.4682H273.076ZM297.352 55.8585C297.352 64.6606 291.958 69.7616 285.164 69.7616C278.372 69.7616 272.877 64.5605 272.877 55.8585C272.877 47.1566 278.372 42.0554 285.164 42.0554C291.958 42.0554 297.352 47.1566 297.352 55.8585Z" fill="currentColor"/><path d="M317.964 67.0609C317.964 74.7627 324.357 81.8643 334.848 81.8643C342.139 81.8643 346.835 78.4634 349.332 74.5625C349.332 76.463 349.532 79.1635 349.832 80.4639H362.02C361.72 78.7635 361.422 75.2627 361.422 72.6622V48.4567C361.422 38.5545 355.627 29.7527 340.043 29.7527C326.855 29.7527 319.761 38.2544 318.963 45.9562L330.751 48.4567C331.151 44.1558 334.348 40.455 340.141 40.455C345.737 40.455 348.434 43.3556 348.434 46.8564C348.434 48.5568 347.536 49.9572 344.738 50.3572L332.65 52.1576C324.458 53.3579 317.964 58.2589 317.964 67.0609ZM337.644 71.962C333.349 71.962 331.25 69.1614 331.25 66.2608C331.25 62.4599 333.947 60.5594 337.345 60.0594L348.434 58.359V60.5594C348.434 69.2615 343.239 71.962 337.644 71.962Z" fill="currentColor"/><path d="M387.703 80.4641V74.4627C390.299 78.6637 395.494 81.6644 402.288 81.6644C416.276 81.6644 425.467 70.5618 425.467 55.6585C425.467 41.0552 417.174 29.9528 402.788 29.9528C395.494 29.9528 390.1 33.1535 387.902 36.6541V8.04785H374.815V80.4641H387.703ZM412.178 55.7584C412.178 64.7605 406.784 69.7616 399.99 69.7616C393.297 69.7616 387.703 64.6606 387.703 55.7584C387.703 46.7564 393.297 41.8554 399.99 41.8554C406.784 41.8554 412.178 46.7564 412.178 55.7584Z" fill="currentColor"/><path d="M432.99 67.0609C432.99 74.7627 439.383 81.8643 449.873 81.8643C457.165 81.8643 461.862 78.4634 464.358 74.5625C464.358 76.463 464.559 79.1635 464.858 80.4639H477.046C476.748 78.7635 476.448 75.2627 476.448 72.6622V48.4567C476.448 38.5545 470.653 29.7527 455.068 29.7527C441.881 29.7527 434.788 38.2544 433.989 45.9562L445.776 48.4567C446.177 44.1558 449.374 40.455 455.167 40.455C460.763 40.455 463.46 43.3556 463.46 46.8564C463.46 48.5568 462.561 49.9572 459.763 50.3572L447.676 52.1576C439.484 53.3579 432.99 58.2589 432.99 67.0609ZM452.671 71.962C448.375 71.962 446.276 69.1614 446.276 66.2608C446.276 62.4599 448.973 60.5594 452.371 60.0594L463.46 58.359V60.5594C463.46 69.2615 458.265 71.962 452.671 71.962Z" fill="currentColor"/><path d="M485.645 66.7608C486.243 72.3621 491.339 81.9642 506.124 81.9642C519.012 81.9642 525.205 73.7624 525.205 65.7607C525.205 58.559 520.311 52.6577 510.62 50.6571L503.626 49.1569C500.929 48.6568 499.132 47.1565 499.132 44.7559C499.132 41.9552 501.928 39.8549 505.425 39.8549C511.021 39.8549 513.118 43.5556 513.519 46.4564L524.607 43.9558C524.007 38.6546 519.312 29.7527 505.326 29.7527C494.735 29.7527 486.944 37.0543 486.944 45.8561C486.944 52.7576 491.238 58.4591 500.73 60.5594L507.224 62.0598C511.021 62.8599 512.519 64.6605 512.519 66.8609C512.519 69.4615 510.421 71.762 506.025 71.762C500.23 71.762 497.334 68.1611 497.034 64.2602L485.645 66.7608Z" fill="currentColor"/><path d="M545.385 50.2571C545.685 45.7562 549.482 40.5549 556.375 40.5549C563.967 40.5549 567.165 45.3561 567.365 50.2571H545.385ZM568.664 63.0601C567.065 67.4609 563.668 70.5617 557.474 70.5617C550.88 70.5617 545.385 65.8606 545.087 59.3593H580.252C580.252 59.159 580.451 57.1587 580.451 55.2582C580.451 39.4547 571.361 29.7527 556.175 29.7527C543.588 29.7527 531.998 39.9548 531.998 55.6584C531.998 72.262 543.886 81.9642 557.374 81.9642C569.462 81.9642 577.255 74.8626 579.753 66.3607L568.664 63.0601Z" fill="currentColor"/><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint0_linear)"/><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint1_linear)" fill-opacity="0.2"/><path d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="#3ECF8E"/><defs><linearGradient id="paint0_linear" x1="53.9738" y1="54.974" x2="94.1635" y2="71.8295" gradientUnits="userSpaceOnUse"><stop stop-color="#249361"/><stop offset="1" stop-color="#3ECF8E"/></linearGradient><linearGradient id="paint1_linear" x1="36.1558" y1="30.578" x2="54.4844" y2="65.0806" gradientUnits="userSpaceOnUse"><stop/><stop offset="1" stop-opacity="0"/></linearGradient></defs></svg>
-          </a>
-          <h3 class="powered-card-title">Supabase</h3>
-          <p class="powered-card-desc">Handles authentication, real-time signaling, and presence. Stream commands flow through Postgres changes, simulator state syncs via Realtime channels, and screenshots land in Supabase Storage.</p>
-        </div>
-        <div class="powered-card">
           <a href="https://github.com/livekit/client-sdk-swift" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
             <svg viewBox="0 0 123 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="powered-card-svg"><g clip-path="url(#lk)"><path d="M4.6991 0H0V27.5637H17.0471V23.538H4.6991V0Z" fill="currentColor"/><path d="M24.8037 12.5483H20.2505V27.5626H24.8037V12.5483Z" fill="currentColor"/><path d="M38.2076 27.0186L32.4161 8.01416H27.8628L33.9461 27.563H42.4691L48.5523 8.01416H43.9623L38.2076 27.0186Z" fill="currentColor"/><path d="M59.8485 7.58105C53.9468 7.58105 50.1953 11.7886 50.1953 17.7724C50.1953 23.7206 53.8376 28.0002 59.8485 28.0002C64.4374 28.0002 67.7523 25.9691 68.9906 21.7981H64.3606C63.6691 23.684 62.393 24.8104 59.8798 24.8104C57.1116 24.8104 55.1818 22.8879 54.8177 19.1171H69.3147C69.384 18.6364 69.4201 18.1515 69.4228 17.6659C69.4239 11.5702 65.6356 7.58105 59.8485 7.58105ZM54.8533 15.9585C55.3277 12.4416 57.185 10.773 59.8485 10.773C62.6524 10.773 64.5465 12.8397 64.7658 15.9585H54.8533Z" fill="currentColor"/><path d="M96.048 0H90.1474L78.7103 12.6216V0H74.0112V27.5637H78.7103V13.6372L91.3132 27.5637H97.323L84.1376 13.0562L96.048 0Z" fill="currentColor"/><path d="M103.914 8.01416H99.3608V23.0284H103.914V8.01416Z" fill="currentColor"/><path d="M20.251 8.01416H15.6978V12.5477H20.251V8.01416Z" fill="currentColor"/><path d="M108.468 23.0298H103.915V27.5633H108.468V23.0298Z" fill="currentColor"/><path d="M122.073 23.0298H117.52V27.5633H122.073V23.0298Z" fill="currentColor"/><path d="M122.073 12.5484V8.0149H117.52V0H112.966V8.0149H108.413V12.5484H112.966V23.0302H117.52V12.5484H122.073Z" fill="currentColor"/></g><defs><clipPath id="lk"><rect width="123" height="28" fill="currentColor"/></clipPath></defs></svg>
           </a>
@@ -517,11 +509,11 @@ const features = [
           <p class="powered-card-desc">Publishes the H.264 track into a WebRTC room at 60 fps. The web dashboard subscribes instantly. Data channels carry touch events and commands bidirectionally over the same low-latency connection.</p>
         </div>
         <div class="powered-card">
-          <a href="https://tailscale.com" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
-            <svg viewBox="0 0 746 144" fill="none" xmlns="http://www.w3.org/2000/svg" class="powered-card-svg"><path fill="#fff" d="M18,90c9.9,0,18-8.1,18-18s-8.1-18-18-18S0,62.1,0,72s8.1,18,18,18Z"/><path fill="#fff" d="M72,90c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" d="M72,144c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" d="M126,90c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M18,144c9.9,0,18-8.1,18-18s-8.1-18-18-18S0,116.1,0,126s8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M126,144c9.9,0,18-8.1,18-18s-8.1-18-18-18-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M18,36c9.9,0,18-8.1,18-18S27.9,0,18,0,0,8.1,0,18s8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M72,36c9.9,0,18-8.1,18-18S81.9,0,72,0s-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" fill-opacity=".4" d="M126,36c9.9,0,18-8.1,18-18S135.9,0,126,0s-18,8.1-18,18,8.1,18,18,18Z"/><path fill="#fff" d="M237.5,126c4.7,0,8.5-.4,13.1-1.3v-17c-2.8,1-5.9,1.3-8.8,1.3-7.2,0-9.8-3.5-9.8-10.3v-34.6h18.6v-17h-18.6v-25.2h-20.5v25.2h-13.4v17h13.4v36.5c0,16.1,8.5,25.4,26.1,25.4Z"/><path fill="#fff" d="M284.1,126c11,0,18.3-3.7,22-9.4.3,2.5,1.2,5.9,2.3,7.9h18.5c-1-3.5-1.8-9.1-1.8-12.8v-40.2c0-16.6-11.9-26-32-26s-27.1,5.7-33.7,14.1l11.7,11.6c5.3-5.9,12-9,20.2-9s14.4,3.4,14.4,8.4-2.9,7.2-18.8,7.2-30.7,6.3-30.7,23.9,11.7,24.2,27.7,24.2ZM288.2,110.4c-7.9,0-11.6-3.4-11.6-9.4s4.4-8.8,11.7-8.8c11.7,0,15-.7,17.5-3.2v6.3c0,8.4-7,15.1-17.6,15.1Z"/><path fill="#fff" d="M338.5,37.2h21.4v-19.2h-21.4v19.2ZM339,124.5h20.5V47.1h-20.5v77.5Z"/><path fill="#fff" d="M374.5,124.5h20.5V20.3h-20.5v104.2Z"/><path fill="#fff" d="M437.7,126c22.6,0,34.2-11.9,34.2-24.4s-5.7-19.7-24.5-23c-13.2-2.3-21.4-5.3-21.4-9.8s4.7-6.7,12.6-6.7,12.9,2.3,17.3,7.5l13.1-11c-6.6-8.2-17.5-12.9-30.4-12.9-19.8,0-32.1,10.6-32.1,23.5s12.9,20.4,26.9,22.9c11.6,2.1,18,4.3,18,9.2s-4.5,7.8-13.2,7.8-15.1-4-18.2-9.8l-17.3,8.2c4.3,10.6,18.8,18.6,35.1,18.6Z"/><path fill="#fff" d="M517.8,126c14.7,0,25.2-5.9,33.2-19.1l-16.4-8.4c-3.1,6.2-8.1,10.4-16.7,10.4-13.1,0-20.1-10.6-20.1-23.3s7.5-23,20.1-23,13.2,4.3,16.3,10.7l16.6-8.8c-5.6-12.2-16.6-18.9-32.9-18.9-26.9,0-40.6,19.7-40.6,40.1s16.7,40.4,40.6,40.4Z"/><path fill="#fff" d="M583.7,126c11,0,18.3-3.7,22-9.4.3,2.5,1.2,5.9,2.3,7.9h18.5c-1-3.5-1.8-9.1-1.8-12.8v-40.2c0-16.6-11.9-26-32-26s-27.1,5.7-33.7,14.1l11.7,11.6c5.3-5.9,12-9,20.2-9s14.4,3.4,14.4,8.4-2.9,7.2-18.8,7.2-30.7,6.3-30.7,23.9,11.7,24.2,27.7,24.2ZM587.8,110.4c-7.9,0-11.6-3.4-11.6-9.4s4.4-8.8,11.7-8.8c11.7,0,15-.7,17.5-3.2v6.3c0,8.4-7,15.1-17.6,15.1Z"/><path fill="#fff" d="M636.8,124.5h20.5V20.3h-20.5v104.2Z"/><path fill="#fff" d="M706.7,126c15.1,0,27.3-6,34-16.7l-15.6-10c-4.1,6.5-9.5,10-18.5,10s-17.5-5.6-19.4-16.4h58.4v-7.2c0-20.4-12.5-40.1-39.2-40.1s-39.2,19.8-39.2,40.2c0,29.1,21.9,40.2,39.3,40.2ZM688.1,76.7c3.2-9.8,10-14.4,18.9-14.4s16.3,6,18.3,14.4h-37.3Z"/></svg>
+          <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" class="powered-card-img-link powered-card-logo-wrap">
+            <svg width="581" height="113" viewBox="0 0 581 113" fill="none" xmlns="http://www.w3.org/2000/svg" class="powered-card-svg powered-card-svg--wide"><path d="M151.397 66.7608C151.996 72.3621 157.091 81.9642 171.877 81.9642C184.764 81.9642 190.959 73.7624 190.959 65.7607C190.959 58.559 186.063 52.6577 176.373 50.6571L169.379 49.1569C166.682 48.6568 164.884 47.1565 164.884 44.7559C164.884 41.9552 167.681 39.8549 171.178 39.8549C176.772 39.8549 178.87 43.5556 179.27 46.4564L190.359 43.9558C189.76 38.6546 185.064 29.7527 171.078 29.7527C160.488 29.7527 152.696 37.0543 152.696 45.8561C152.696 52.7576 156.991 58.4591 166.482 60.5594L172.976 62.0598C176.772 62.8599 178.271 64.6605 178.271 66.8609C178.271 69.4615 176.173 71.762 171.777 71.762C165.983 71.762 163.085 68.1611 162.786 64.2602L151.397 66.7608Z" fill="currentColor"/><path d="M233.421 80.4639H246.109C245.909 78.7635 245.609 75.3628 245.609 71.5618V31.2529H232.321V59.8592C232.321 65.5606 228.925 69.5614 223.031 69.5614C216.837 69.5614 214.039 65.1604 214.039 59.6592V31.2529H200.752V62.3599C200.752 73.0622 207.545 81.7642 219.434 81.7642C224.628 81.7642 230.325 79.7638 233.022 75.1627C233.022 77.1631 233.221 79.4636 233.421 80.4639Z" fill="currentColor"/><path d="M273.076 99.4682V75.663C275.473 78.9636 280.469 81.6644 287.263 81.6644C301.149 81.6644 310.439 70.6617 310.439 55.7584C310.439 41.1553 302.148 30.1528 287.762 30.1528C280.37 30.1528 274.875 33.4534 272.677 37.2544V31.253H259.79V99.4682H273.076ZM297.352 55.8585C297.352 64.6606 291.958 69.7616 285.164 69.7616C278.372 69.7616 272.877 64.5605 272.877 55.8585C272.877 47.1566 278.372 42.0554 285.164 42.0554C291.958 42.0554 297.352 47.1566 297.352 55.8585Z" fill="currentColor"/><path d="M317.964 67.0609C317.964 74.7627 324.357 81.8643 334.848 81.8643C342.139 81.8643 346.835 78.4634 349.332 74.5625C349.332 76.463 349.532 79.1635 349.832 80.4639H362.02C361.72 78.7635 361.422 75.2627 361.422 72.6622V48.4567C361.422 38.5545 355.627 29.7527 340.043 29.7527C326.855 29.7527 319.761 38.2544 318.963 45.9562L330.751 48.4567C331.151 44.1558 334.348 40.455 340.141 40.455C345.737 40.455 348.434 43.3556 348.434 46.8564C348.434 48.5568 347.536 49.9572 344.738 50.3572L332.65 52.1576C324.458 53.3579 317.964 58.2589 317.964 67.0609ZM337.644 71.962C333.349 71.962 331.25 69.1614 331.25 66.2608C331.25 62.4599 333.947 60.5594 337.345 60.0594L348.434 58.359V60.5594C348.434 69.2615 343.239 71.962 337.644 71.962Z" fill="currentColor"/><path d="M387.703 80.4641V74.4627C390.299 78.6637 395.494 81.6644 402.288 81.6644C416.276 81.6644 425.467 70.5618 425.467 55.6585C425.467 41.0552 417.174 29.9528 402.788 29.9528C395.494 29.9528 390.1 33.1535 387.902 36.6541V8.04785H374.815V80.4641H387.703ZM412.178 55.7584C412.178 64.7605 406.784 69.7616 399.99 69.7616C393.297 69.7616 387.703 64.6606 387.703 55.7584C387.703 46.7564 393.297 41.8554 399.99 41.8554C406.784 41.8554 412.178 46.7564 412.178 55.7584Z" fill="currentColor"/><path d="M432.99 67.0609C432.99 74.7627 439.383 81.8643 449.873 81.8643C457.165 81.8643 461.862 78.4634 464.358 74.5625C464.358 76.463 464.559 79.1635 464.858 80.4639H477.046C476.748 78.7635 476.448 75.2627 476.448 72.6622V48.4567C476.448 38.5545 470.653 29.7527 455.068 29.7527C441.881 29.7527 434.788 38.2544 433.989 45.9562L445.776 48.4567C446.177 44.1558 449.374 40.455 455.167 40.455C460.763 40.455 463.46 43.3556 463.46 46.8564C463.46 48.5568 462.561 49.9572 459.763 50.3572L447.676 52.1576C439.484 53.3579 432.99 58.2589 432.99 67.0609ZM452.671 71.962C448.375 71.962 446.276 69.1614 446.276 66.2608C446.276 62.4599 448.973 60.5594 452.371 60.0594L463.46 58.359V60.5594C463.46 69.2615 458.265 71.962 452.671 71.962Z" fill="currentColor"/><path d="M485.645 66.7608C486.243 72.3621 491.339 81.9642 506.124 81.9642C519.012 81.9642 525.205 73.7624 525.205 65.7607C525.205 58.559 520.311 52.6577 510.62 50.6571L503.626 49.1569C500.929 48.6568 499.132 47.1565 499.132 44.7559C499.132 41.9552 501.928 39.8549 505.425 39.8549C511.021 39.8549 513.118 43.5556 513.519 46.4564L524.607 43.9558C524.007 38.6546 519.312 29.7527 505.326 29.7527C494.735 29.7527 486.944 37.0543 486.944 45.8561C486.944 52.7576 491.238 58.4591 500.73 60.5594L507.224 62.0598C511.021 62.8599 512.519 64.6605 512.519 66.8609C512.519 69.4615 510.421 71.762 506.025 71.762C500.23 71.762 497.334 68.1611 497.034 64.2602L485.645 66.7608Z" fill="currentColor"/><path d="M545.385 50.2571C545.685 45.7562 549.482 40.5549 556.375 40.5549C563.967 40.5549 567.165 45.3561 567.365 50.2571H545.385ZM568.664 63.0601C567.065 67.4609 563.668 70.5617 557.474 70.5617C550.88 70.5617 545.385 65.8606 545.087 59.3593H580.252C580.252 59.159 580.451 57.1587 580.451 55.2582C580.451 39.4547 571.361 29.7527 556.175 29.7527C543.588 29.7527 531.998 39.9548 531.998 55.6584C531.998 72.262 543.886 81.9642 557.374 81.9642C569.462 81.9642 577.255 74.8626 579.753 66.3607L568.664 63.0601Z" fill="currentColor"/><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint0_linear)"/><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint1_linear)" fill-opacity="0.2"/><path d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="#3ECF8E"/><defs><linearGradient id="paint0_linear" x1="53.9738" y1="54.974" x2="94.1635" y2="71.8295" gradientUnits="userSpaceOnUse"><stop stop-color="#249361"/><stop offset="1" stop-color="#3ECF8E"/></linearGradient><linearGradient id="paint1_linear" x1="36.1558" y1="30.578" x2="54.4844" y2="65.0806" gradientUnits="userSpaceOnUse"><stop/><stop offset="1" stop-opacity="0"/></linearGradient></defs></svg>
           </a>
-          <h3 class="powered-card-title">Tailscale</h3>
-          <p class="powered-card-desc">Access your Mac and SimCast dashboard from anywhere over a private, encrypted mesh network. No port forwarding, no VPN configuration — just install Tailscale and your devices are connected.</p>
+          <h3 class="powered-card-title">Supabase</h3>
+          <p class="powered-card-desc">Handles authentication, real-time signaling, and presence. Stream commands flow through Postgres changes, simulator state syncs via Realtime channels, and screenshots land in Supabase Storage.</p>
         </div>
       </div>
     </section>
@@ -1212,7 +1204,7 @@ const features = [
   .powered-sub { color: var(--text-2); font-size: 1rem; max-width: 42rem; margin: 0 auto; }
 
   .powered-grid { display: grid; gap: 1.5rem; }
-  @media (min-width: 768px) { .powered-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 768px) { .powered-grid { grid-template-columns: repeat(3, 1fr); } }
 
   .powered-card {
     border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
